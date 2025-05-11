@@ -179,12 +179,17 @@ export const GlobalProvider = ({ children }) => {
         }
     };
 
-    const updateCategory = async (id, categoryData) => {
+    const updateCategory = async (id, updatedCategory) => {
         try {
-            await axios.put(`${BASE_URL}update-category/${id}`, categoryData);
-            getCategories();
-        } catch (err) {
-            setError(err.response?.data?.message || "Failed to update category");
+            const response = await axios.put(`${BASE_URL}/update-category/${id}`, updatedCategory);
+            setCategories(
+                categories.map((category) =>
+                    category._id === id ? response.data : category
+                )
+            );
+            setError(null);
+        } catch (error) {
+            setError(error.response?.data?.message || "Failed to update category");
         }
     };
 

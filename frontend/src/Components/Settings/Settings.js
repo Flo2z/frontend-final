@@ -6,16 +6,31 @@ import Button from "../Button/Button";
 import { plus, trash, settings } from "../../utils/Icons";
 
 function Settings() {
-    const { categories, addCategory, deleteCategory, getCategories, error, setError } = useGlobalContext();
+    const { categories, addCategory, deleteCategory, getCategories, updateCategory, error, setError } = useGlobalContext();
+
     const [formState, setFormState] = useState({
         name: "",
         type: "expense",
         monthlyBudget: "",
     });
+    const [editingCategory, setEditingCategory] = useState(null);
 
     useEffect(() => {
         getCategories();
     }, []);
+
+    // Populate form when editing a category
+    useEffect(() => {
+        if (editingCategory) {
+            setFormState({
+                name: editingCategory.name,
+                type: editingCategory.type,
+                monthlyBudget: editingCategory.monthlyBudget.toString(),
+            });
+        } else {
+            setFormState({ name: "", type: "expense", monthlyBudget: "" });
+        }
+    }, [editingCategory]);
 
     const handleInput = (name) => (e) => {
         setFormState({ ...formState, [name]: e.target.value });
@@ -25,19 +40,28 @@ function Settings() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const { name, type, monthlyBudget } = formState;
+
         if (!name || !type) {
             setError("Name and type are required");
             return;
         }
-        if (monthlyBudget < 0) {
+        if (monthlyBudget && Number(monthlyBudget) < 0) {
             setError("Monthly budget must be a non-negative number");
             return;
         }
-        addCategory({
+
+        const categoryData = {
             name,
             type,
-            monthlyBudget: Number(monthlyBudget) || 0,
-        });
+            monthlyBudget: monthlyBudget ? Number(monthlyBudget) : 0,
+        };
+
+        if (editingCategory) {
+            updateCategory(editingCategory._id, categoryData);
+            setEditingCategory(null);
+        } else {
+            addCategory(categoryData);
+        }
         setFormState({ name: "", type: "expense", monthlyBudget: "" });
     };
 
@@ -81,13 +105,26 @@ function Settings() {
                         </div>
                         <div className="submit-btn">
                             <Button
-                                name={"Add Category"}
+                                name={editingCategory ? "Update Category" : "Add Category"}
                                 icon={plus}
                                 bPad={".8rem 1rem"}
                                 bRad={"10px"}
                                 bg={"var(--color-accent)"}
                                 color={"#fff"}
                             />
+                            {editingCategory && (
+                                <Button
+                                    name={"Cancel"}
+                                    bPad={".8rem 1rem"}
+                                    bRad={"10px"}
+                                    bg={"var(--color-delete)"}
+                                    color={"#fff"}
+                                    onClick={() => {
+                                        setEditingCategory(null);
+                                        setFormState({ name: "", type: "expense", monthlyBudget: "" });
+                                    }}
+                                />
+                            )}
                         </div>
                     </form>
                 </div>
@@ -102,6 +139,15 @@ function Settings() {
                                 <p>Monthly Budget: {category.monthlyBudget.toFixed(2)}₸</p>
                             </div>
                             <div className="category-actions">
+                                <Button
+                                    icon={settings}
+                                    bPad={".5rem"}
+                                    bRad={"50%"}
+                                    bg={"var(--color-accent)"}
+                                    color={"#fff"}
+                                    iColor={"#fff"}
+                                    onClick={() => setEditingCategory(category)}
+                                />
                                 <Button
                                     icon={trash}
                                     bPad={".5rem"}
@@ -125,10 +171,10 @@ const SettingsStyled = styled.div`
     flex-direction: column;
     gap: 2rem;
     h1, h2, h3 {
-        color: #222260;;
+        color: #222260;
     }
     .category-form {
-        margin-top:1.2rem;
+        margin-top: 1.2rem;
         background: rgba(255, 255, 255, 0.8);
         border: 2px solid #ffffff;
         border-radius: 20px;
@@ -166,6 +212,8 @@ const SettingsStyled = styled.div`
             }
         }
         .submit-btn {
+            display: flex;
+            gap: 1rem;
             button {
                 &:hover {
                     background: var(--color-green) !important;
@@ -182,7 +230,7 @@ const SettingsStyled = styled.div`
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.8);;
+            background: rgba(255, 255, 255, 0.8);
             border: 2px solid #ffffff;
             border-radius: 10px;
             padding: 1rem;
@@ -200,6 +248,8 @@ const SettingsStyled = styled.div`
                 }
             }
             .category-actions {
+                display: flex;
+                gap: 0.5rem;
                 button {
                     &:hover {
                         background: var(--color-green) !important;
@@ -209,4 +259,5 @@ const SettingsStyled = styled.div`
         }
     }
 `;
+
 export default Settings;
