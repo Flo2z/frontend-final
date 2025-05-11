@@ -135,12 +135,17 @@ function Expenses() {
 const ExpenseStyled = styled.div`
   display: flex;
   overflow: auto;
+  h1, h5{
+    color: #222260;
+  }
   .total-expense {
     display: flex;
     justify-content: center;
     align-items: center;
     border: 2px solid #ffffff;
-    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+    color: #222260;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     padding: 1rem;
     margin: 1rem 0;
@@ -160,19 +165,20 @@ const ExpenseStyled = styled.div`
     }
   }
   .category-group {
+    
     margin-bottom: 2rem;
     padding: 1rem;
     border: 2px solid #ffffff;
     border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
     .category-header {
       margin-bottom: 1rem;
       border-bottom: 1px solid var(--color-grey);
       padding-bottom: 0.5rem;
       h3 {
         font-size: 1.5rem;
-        color: #ffffff;
+        color: #222260;
       }
       p {
         font-size: 1rem;

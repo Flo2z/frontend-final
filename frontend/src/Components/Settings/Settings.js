@@ -125,14 +125,15 @@ const SettingsStyled = styled.div`
     flex-direction: column;
     gap: 2rem;
     h1, h2, h3 {
-        color: #ffffff;
+        color: #222260;;
     }
     .category-form {
-        background: rgba(255, 255, 255, 0.1);
+        margin-top:1.2rem;
+        background: rgba(255, 255, 255, 0.8);
         border: 2px solid #ffffff;
         border-radius: 20px;
         padding: 2rem;
-        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
         form {
             display: flex;
             flex-direction: column;
@@ -147,8 +148,8 @@ const SettingsStyled = styled.div`
             border-radius: 5px;
             border: 2px solid #fff;
             background: transparent;
-            box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-            color: #ffffff;
+            box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.3);
+            color: #222260;
             &::placeholder {
                 color: rgba(34, 34, 96, 0.4);
             }
@@ -156,7 +157,7 @@ const SettingsStyled = styled.div`
         select {
             color: rgba(34, 34, 96, 0.4);
             &:focus, &:active {
-                color: #ffffff;
+                color: #222260;
             }
         }
         .input-control {
@@ -181,12 +182,12 @@ const SettingsStyled = styled.div`
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #fcf6f9;
+            background: rgba(255, 255, 255, 0.8);;
             border: 2px solid #ffffff;
             border-radius: 10px;
             padding: 1rem;
             margin-bottom: 1rem;
-            box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+            box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
             .category-details {
                 h4 {
                     margin: 0;
