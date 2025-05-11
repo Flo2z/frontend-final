@@ -24,9 +24,13 @@ export const GlobalProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        const storedUser = localStorage.getItem("user");
         if (token) {
             setAuthToken(token);
             setIsAuthenticated(true);
+            if (storedUser){
+                setUser(JSON.parse(storedUser));
+            }
             getCategories();
         }
     }, []);
@@ -37,6 +41,7 @@ export const GlobalProvider = ({ children }) => {
             const { _id, name, email: userEmail, token } = response.data;
             localStorage.setItem("token", token);
             setAuthToken(token);
+            localStorage.setItem("user", JSON.stringify({ _id, name, email }));
             setUser({ _id, name, email: userEmail });
             setIsAuthenticated(true);
             getCategories();
@@ -51,6 +56,7 @@ export const GlobalProvider = ({ children }) => {
             const { _id, name, email, token } = response.data;
             localStorage.setItem("token", token);
             setAuthToken(token);
+            localStorage.setItem("user", JSON.stringify({ _id, name, email }));
             setUser({ _id, name, email });
             setIsAuthenticated(true);
             getCategories();
@@ -61,6 +67,7 @@ export const GlobalProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("user")
         setAuthToken(null);
         setUser(null);
         setIsAuthenticated(false);
