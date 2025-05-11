@@ -134,6 +134,12 @@ const IncomeStyled = styled.div`
   h1, h5 {
   color:rgb(34, 34, 96);
   }
+
+  input, select, textarea{
+    width: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
+  }
   display: flex;
   overflow: auto;
   .total-income {
@@ -168,7 +174,7 @@ const IncomeStyled = styled.div`
     border: 2px solid #ffffff;
     border-radius: 15px;
     background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
     .category-header {
       margin-bottom: 1rem;
       border-bottom: 1px solid var(--color-grey);

@@ -55,7 +55,7 @@ function IncomeItem({
 const IncomeItemStyled = styled.div`
     background: #fcf6f9;
     border: 2px solid #ffffff;
-    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.);
     border-radius: 10px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -63,8 +63,8 @@ const IncomeItemStyled = styled.div`
     align-items: center;
     gap: 1rem;
     width: 100%;
-    color: #222260;
-
+    
+    
     .content {
         flex: 1;
         display: flex;

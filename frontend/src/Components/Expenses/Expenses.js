@@ -135,6 +135,11 @@ function Expenses() {
 const ExpenseStyled = styled.div`
   display: flex;
   overflow: auto;
+  input, select, textarea{
+    width: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
+  }
   h1, h5{
     color: #222260;
   }
@@ -165,7 +170,6 @@ const ExpenseStyled = styled.div`
     }
   }
   .category-group {
-    
     margin-bottom: 2rem;
     padding: 1rem;
     border: 2px solid #ffffff;
