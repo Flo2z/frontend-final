@@ -1,57 +1,141 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useGlobalContext } from "../../context/globalContext";
 import { InnerLayout } from "../../styles/Layouts";
-import IncomeItem from "../IncomeItem/IncomeItem";
 import ExpenseForm from "./ExpenseForm";
+import IncomeItem from "../IncomeItem/IncomeItem";
+import { Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function Expenses() {
-  const { addIncome, expenses, getExpenses, deleteExpense, totalExpenses } =
-    useGlobalContext();
+  const { expenses, getExpenses, deleteExpense, totalExpenses, categories, updateExpense } = useGlobalContext();
+  const [editingExpense, setEditingExpense] = useState(null);
 
   useEffect(() => {
     getExpenses();
   }, []);
+
+  const groupedExpenses = expenses.reduce((acc, expense) => {
+    const { category } = expense;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(expense);
+    return acc;
+  }, {});
+
+  const categoryBudgets = categories.reduce((acc, cat) => {
+    acc[cat.name] = cat.monthlyBudget;
+    return acc;
+  }, {});
+
+  const sortedCategories = Object.keys(groupedExpenses).sort();
+
+  const pieChartOptions = {
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          color: "#ffffff",
+          font: {
+            size: 12,
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const label = context.label || "";
+            const value = context.raw || 0;
+            return `${label}: Rs. ${value.toFixed(2)}`;
+          },
+        },
+      },
+    },
+  };
+
+  const handleEdit = (expense) => {
+    setEditingExpense(expense);
+  };
+
+  const clearEdit = () => {
+    setEditingExpense(null);
+  };
+
   return (
-    <ExpenseStyled>
-      <InnerLayout>
-        <h1>Expenses</h1>
-        <h2 className="total-income">
-          Total Expense: <span>Rs. {totalExpenses()}</span>
-        </h2>
-        <div className="income-content">
-          <div className="form-container">
-            <ExpenseForm />
+      <ExpenseStyled>
+        <InnerLayout>
+          <h1>Expenses</h1>
+          <h2 className="total-expense">
+            Total Expense: <span>Rs. {totalExpenses()}</span>
+          </h2>
+          <div className="expense-content">
+            <div className="form-container">
+              <ExpenseForm editingExpense={editingExpense} clearEdit={clearEdit} />
+            </div>
+            <div className="expenses">
+              {sortedCategories.length === 0 && <p>No expenses found.</p>}
+              {sortedCategories.map((category) => {
+                const totalAmount = groupedExpenses[category].reduce((sum, expense) => sum + expense.amount, 0);
+                const monthlyBudget = categoryBudgets[category] || 0;
+                const remaining = Math.max(0, monthlyBudget - totalAmount);
+                const pieData = {
+                  labels: ["Spent", "Remaining"],
+                  datasets: [
+                    {
+                      data: [totalAmount, remaining],
+                      backgroundColor: ["#FF0000", "#42AD00"],
+                      borderColor: "#ffffff",
+                      borderWidth: 2,
+                    },
+                  ],
+                };
+                return (
+                    <div key={category} className="category-group">
+                      <div className="category-header">
+                        <h3>{category}</h3>
+                        <p>Monthly Budget: Rs. {monthlyBudget.toFixed(2)}</p>
+                        <p>Total Spent: Rs. {totalAmount.toFixed(2)}</p>
+                        <div className="pie-chart">
+                          <Pie data={pieData} options={pieChartOptions} />
+                        </div>
+                      </div>
+                      {groupedExpenses[category].map((expense) => (
+                          <IncomeItem
+                              key={expense._id}
+                              id={expense._id}
+                              title={expense.title}
+                              description={expense.description}
+                              amount={expense.amount}
+                              date={expense.date}
+                              type={expense.type}
+                              category={expense.category}
+                              indicatorColor="var(--color-delete)"
+                              deleteItem={deleteExpense}
+                              onEdit={() => handleEdit(expense)}
+                          />
+                      ))}
+                    </div>
+                );
+              })}
+            </div>
           </div>
-          <div className="incomes">
-            {expenses.map((income) => {
-              const { _id, title, amount, date, description, type } = income;
-              console.log(income);
-              return (
-                <IncomeItem
-                  key={_id}
-                  id={_id}
-                  title={title}
-                  description={description}
-                  amount={amount}
-                  date={date}
-                  type={type}
-                  indicatorColor="var(--color-green)"
-                  deleteItem={deleteExpense}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </InnerLayout>
-    </ExpenseStyled>
+        </InnerLayout>
+      </ExpenseStyled>
   );
 }
 
 const ExpenseStyled = styled.div`
   display: flex;
   overflow: auto;
-  .total-income {
+  .total-expense {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,16 +149,42 @@ const ExpenseStyled = styled.div`
     span {
       font-size: 2.5rem;
       font-weight: 800;
-      color: var(--color-green);
+      color: var(--color-delete);
     }
   }
-  .income-content {
+  .expense-content {
     display: flex;
     gap: 2rem;
-    .incomes {
+    .expenses {
       flex: 1;
     }
   }
+  .category-group {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 2px solid #ffffff;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+    .category-header {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--color-grey);
+      padding-bottom: 0.5rem;
+      h3 {
+        font-size: 1.5rem;
+        color: #ffffff;
+      }
+      p {
+        font-size: 1rem;
+        color: var(--primary-color2);
+        margin: 0.3rem 0;
+      }
+      .pie-chart {
+        max-width: 150px;
+        max-height: 150px;
+        margin: 1rem auto;
+      }
+    }
+  }
 `;
-
 export default Expenses;

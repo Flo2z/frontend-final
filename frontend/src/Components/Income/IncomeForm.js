@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -6,15 +6,36 @@ import { useGlobalContext } from "../../context/globalContext";
 import Button from "../Button/Button";
 import { plus } from "../../utils/Icons";
 
-function Form() {
-    const { addIncome, error, setError } = useGlobalContext();
+function IncomeForm({ editingIncome, clearEdit }) {
+    const { addIncome, updateIncome, categories, error, setError } = useGlobalContext();
+
     const [inputState, setInputState] = useState({
         title: "",
         amount: "",
-        date: "",
+        date: null,
         category: "",
         description: "",
     });
+
+    useEffect(() => {
+        if (editingIncome) {
+            setInputState({
+                title: editingIncome.title,
+                amount: editingIncome.amount.toString(),
+                date: editingIncome.date ? new Date(editingIncome.date) : null,
+                category: editingIncome.category,
+                description: editingIncome.description,
+            });
+        } else {
+            setInputState({
+                title: "",
+                amount: "",
+                date: null,
+                category: "",
+                description: "",
+            });
+        }
+    }, [editingIncome]);
 
     const { title, amount, date, category, description } = inputState;
 
@@ -23,64 +44,94 @@ function Form() {
         setError("");
     };
 
+    const handleDate = (date) => {
+        setInputState({ ...inputState, date });
+        setError("");
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        addIncome(inputState);
+        if (!title || !amount || !date || !category) {
+            setError("Please fill in all required fields");
+            return;
+        }
+        const incomeData = {
+            title,
+            amount: parseFloat(amount),
+            date: date.toISOString(),
+            category,
+            description,
+        };
+        if (editingIncome) {
+            updateIncome(editingIncome._id, incomeData);
+            clearEdit();
+        } else {
+            addIncome(incomeData);
+        }
         setInputState({
             title: "",
             amount: "",
-            date: "",
+            date: null,
             category: "",
             description: "",
         });
     };
 
     return (
-        <FormStyled onSubmit={handleSubmit}>
+        <IncomeFormStyled onSubmit={handleSubmit}>
             {error && <p className="error">{error}</p>}
             <div className="input-control">
                 <input
                     type="text"
                     value={title}
                     name="title"
-                    placeholder="Salary Title"
+                    placeholder="Income Title"
                     onChange={handleInput("title")}
                 />
             </div>
             <div className="input-control">
                 <input
-                    type="text"
                     value={amount}
+                    type="number"
                     name="amount"
-                    placeholder="Salary Amount"
+                    placeholder="Income Amount"
                     onChange={handleInput("amount")}
                 />
             </div>
             <div className="input-control">
                 <DatePicker
                     id="date"
-                    placeholderText="Enter A Date"
+                    placeholderText="Select Date"
                     selected={date}
-                    dateFormat="dd/MM/yyyy"
-                    onChange={(date) => {
-                        setInputState({ ...inputState, date: date });
-                    }}
+                    dateFormat="yyyy-MM-dd"
+                    onChange={handleDate}
                 />
             </div>
-            <div className="input-control">
-                <input
-                    type="text"
+            <div className="selects input-control">
+                <select
+                    required
                     value={category}
                     name="category"
-                    placeholder="Category (e.g., Salary, Freelancing)"
+                    id="category"
                     onChange={handleInput("category")}
-                />
+                >
+                    <option value="" disabled>
+                        Select Category
+                    </option>
+                    {categories
+                        .filter((cat) => cat.type === "income")
+                        .map((cat) => (
+                            <option key={cat._id} value={cat.name}>
+                                {cat.name}
+                            </option>
+                        ))}
+                </select>
             </div>
             <div className="input-control">
         <textarea
             name="description"
             value={description}
-            placeholder="Add A Reference"
+            placeholder="Add A Description"
             id="description"
             cols="30"
             rows="4"
@@ -89,67 +140,65 @@ function Form() {
             </div>
             <div className="submit-btn">
                 <Button
-                    name={"Add Income"}
+                    name={editingIncome ? "Update Income" : "Add Income"}
                     icon={plus}
-                    bPad={".8rem 1rem"}
-                    bRad={"10px"}
-                    bg={"var(--color-accent)"}
-                    color={"#fff"}
+                    bPad=".8rem 1.6rem"
+                    bRad="30px"
+                    bg="var(--color-accent)"
+                    color="#fff"
                 />
             </div>
-        </FormStyled>
+        </IncomeFormStyled>
     );
 }
 
-const FormStyled = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  input,
-  textarea,
-  select {
-    font-family: inherit;
-    font-size: inherit;
-    outline: none;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    border: 2px solid #fff;
-    background: transparent;
-    resize: none;
-    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-    color:#ffffff &::placeholder {
-      color: rgba(34, 34, 96, 0.4);
-    }
-  }
-  .input-control {
-    input {
-      width: 100%;
-    }
-  }
-  textarea:focus,
-  input:focus {
-    color: #ffffff;
-  }
-  .selects {
+const IncomeFormStyled = styled.form`
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 2rem;
+    input,
+    textarea,
     select {
-      color: rgba(34, 34, 96, 0.4);
-      &:focus,
-      &:active {
-        color: rgba(34, 34, 96, 1);
-      }
+        font-family: inherit;
+        font-size: inherit;
+        outline: none;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        border: 2px solid #fff;
+        background: transparent;
+        resize: none;
+        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+        color: rgba(34, 34, 96, 0.9);
+        &::placeholder {
+            color: rgba(34, 34, 96, 0.4);
+        }
     }
-  }
-
-  .submit-btn {
-    button {
-      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-      &:hover {
-        background: var(--color-green) !important;
-      }
+    .input-control {
+        input {
+            width: 100%;
+        }
     }
-  }
+    .selects {
+        select {
+            color: rgba(34, 34, 96, 0.4);
+            &:focus,
+            &:active {
+                color: rgba(34, 34, 96, 1);
+            }
+        }
+    }
+    .submit-btn {
+        button {
+            box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+            &:hover {
+                background: var(--color-green) !important;
+            }
+        }
+    }
+    .error {
+        color: var(--color-delete);
+        text-align: center;
+    }
 `;
-export default Form;
+export default IncomeForm;

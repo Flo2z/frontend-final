@@ -1,13 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import styled from "styled-components";
-import bg from "./img/bg.png";
 import MainLayout from "./styles/MainLayout";
-import Orb from "./Components/Orb/Orb";
-import Navigation from "./Components/Navigation/Navigation";
 import Dashboard from "./Components/Dashboard/Dashboard";
-import Income from "./Components/Income/Income";
-import Expenses from "./Components/Expenses/Expenses";
 import { useGlobalContext } from "./context/globalContext";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
@@ -32,7 +27,6 @@ function App() {
 
 const AppStyled = styled.div`
     height: 100vh;
-
     background: radial-gradient(
             circle at -8.9% 51.2%,
             rgb(248, 246, 242) 0%,
@@ -46,7 +40,6 @@ const AppStyled = styled.div`
 
     main {
         flex: 1;
-        // background: rgba(252, 246, 249, 0.78);
         border: 3px solid #ffffff;
         backdrop-filter: blur(4.5px);
         border-radius: 32px;

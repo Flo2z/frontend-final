@@ -1,160 +1,240 @@
-import React, { useContext, useState } from "react"
-import axios from 'axios'
-
+import React, { useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const BASE_URL = "http://localhost:3001/api/v1/";
 
+const GlobalContext = React.createContext();
 
-const GlobalContext = React.createContext()
-
-export const GlobalProvider = ({children}) => {
-
-    const [incomes, setIncomes] = useState([])
-    const [expenses, setExpenses] = useState([])
-    const [error, setError] = useState(null)
+export const GlobalProvider = ({ children }) => {
+    const [incomes, setIncomes] = useState([]);
+    const [expenses, setExpenses] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [active, setActive] = useState(1);
 
     const setAuthToken = (token) => {
         if (token) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         } else {
-            delete axios.defaults.headers.common['Authorization'];
+            delete axios.defaults.headers.common["Authorization"];
         }
     };
 
-    // Login
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setAuthToken(token);
+            setIsAuthenticated(true);
+            getCategories();
+        }
+    }, []);
+
     const login = async (email, password) => {
-        const response = await axios.post(`${BASE_URL}auth/login`, { email, password });
-        const { _id, name, email: userEmail, token } = response.data;
-        localStorage.setItem('token', token);
-        setAuthToken(token);
-        setUser({ _id, name, email: userEmail });
-        setIsAuthenticated(true);
+        try {
+            const response = await axios.post(`${BASE_URL}auth/login`, { email, password });
+            const { _id, name, email: userEmail, token } = response.data;
+            localStorage.setItem("token", token);
+            setAuthToken(token);
+            setUser({ _id, name, email: userEmail });
+            setIsAuthenticated(true);
+            getCategories();
+        } catch (err) {
+            setError(err.response?.data?.message || "Login failed");
+        }
     };
 
-    // Register
     const register = async (userData) => {
-        const response = await axios.post(`${BASE_URL}auth/register`, userData);
-        const { _id, name, email, token } = response.data;
-        localStorage.setItem('token', token);
-        setAuthToken(token);
-        setUser({ _id, name, email });
-        setIsAuthenticated(true);
+        try {
+            const response = await axios.post(`${BASE_URL}auth/register`, userData);
+            const { _id, name, email, token } = response.data;
+            localStorage.setItem("token", token);
+            setAuthToken(token);
+            setUser({ _id, name, email });
+            setIsAuthenticated(true);
+            getCategories();
+        } catch (err) {
+            setError(err.response?.data?.message || "Registration failed");
+        }
     };
 
-    // Logout
     const logout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         setAuthToken(null);
         setUser(null);
         setIsAuthenticated(false);
         setIncomes([]);
         setExpenses([]);
+        setCategories([]);
         setError(null);
+        setActive(1);
     };
 
-    //calculate incomes
     const addIncome = async (income) => {
-        const response = await axios.post(`${BASE_URL}add-income`, income)
-            .catch((err) =>{
-                setError(err.response.data.message)
-            })
-        getIncomes()
-    }
+        try {
+            await axios.post(`${BASE_URL}add-income`, income);
+            getIncomes();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to add income");
+        }
+    };
+
+    const updateIncome = async (id, income) => {
+        try {
+            await axios.put(`${BASE_URL}update-income/${id}`, income);
+            getIncomes();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to update income");
+        }
+    };
 
     const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}get-incomes`)
-        setIncomes(response.data)
-        console.log(response.data)
-    }
+        try {
+            const response = await axios.get(`${BASE_URL}get-incomes`);
+            setIncomes(response.data);
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch incomes");
+        }
+    };
 
     const deleteIncome = async (id) => {
-        const res  = await axios.delete(`${BASE_URL}delete-income/${id}`)
-        getIncomes()
-    }
+        try {
+            await axios.delete(`${BASE_URL}delete-income/${id}`);
+            getIncomes();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to delete income");
+        }
+    };
 
     const totalIncome = () => {
-        let totalIncome = 0;
-        incomes.forEach((income) =>{
-            totalIncome = totalIncome + income.amount
-        })
+        return incomes.reduce((total, income) => total + income.amount, 0);
+    };
 
-        return totalIncome;
-    }
+    const addExpense = async (expense) => {
+        try {
+            await axios.post(`${BASE_URL}add-expense`, expense);
+            getExpenses();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to add expense");
+        }
+    };
 
-
-    //calculate incomes
-    const addExpense = async (income) => {
-        const response = await axios.post(`${BASE_URL}add-expense`, income)
-            .catch((err) =>{
-                setError(err.response.data.message)
-            })
-        getExpenses()
-    }
+    const updateExpense = async (id, expense) => {
+        try {
+            await axios.put(`${BASE_URL}update-expense/${id}`, expense);
+            getExpenses();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to update expense");
+        }
+    };
 
     const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}get-expenses`)
-        setExpenses(response.data)
-        console.log(response.data)
-    }
+        try {
+            const response = await axios.get(`${BASE_URL}get-expenses`);
+            setExpenses(response.data);
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch expenses");
+        }
+    };
 
     const deleteExpense = async (id) => {
-        const res  = await axios.delete(`${BASE_URL}delete-expense/${id}`)
-        getExpenses()
-    }
+        try {
+            await axios.delete(`${BASE_URL}delete-expense/${id}`);
+            getExpenses();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to delete expense");
+        }
+    };
 
     const totalExpenses = () => {
-        let totalIncome = 0;
-        expenses.forEach((income) =>{
-            totalIncome = totalIncome + income.amount
-        })
-
-        return totalIncome;
-    }
-
+        return expenses.reduce((total, expense) => total + expense.amount, 0);
+    };
 
     const totalBalance = () => {
-        return totalIncome() - totalExpenses()
-    }
+        return totalIncome() - totalExpenses();
+    };
 
     const transactionHistory = () => {
-        const history = [...incomes, ...expenses]
-        history.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt)
-        })
+        const history = [...incomes, ...expenses];
+        history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return history.slice(0, 7);
+    };
 
-        return history.slice(0, 3)
-    }
+    const addCategory = async (category) => {
+        try {
+            await axios.post(`${BASE_URL}add-category`, category);
+            getCategories();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to add category");
+        }
+    };
 
+    const getCategories = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}get-categories`);
+            setCategories(response.data);
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch categories");
+        }
+    };
+
+    const updateCategory = async (id, categoryData) => {
+        try {
+            await axios.put(`${BASE_URL}update-category/${id}`, categoryData);
+            getCategories();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to update category");
+        }
+    };
+
+    const deleteCategory = async (id) => {
+        try {
+            await axios.delete(`${BASE_URL}delete-category/${id}`);
+            getCategories();
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to delete category");
+        }
+    };
 
     return (
-        <GlobalContext.Provider value={{
-            addIncome,
-            getIncomes,
-            incomes,
-            deleteIncome,
-            expenses,
-            totalIncome,
-            addExpense,
-            getExpenses,
-            deleteExpense,
-            totalExpenses,
-            totalBalance,
-            transactionHistory,
-            error,
-            setError,
-            user,
-            isAuthenticated,
-            login,
-            register,
-            logout
-        }}>
+        <GlobalContext.Provider
+            value={{
+                addIncome,
+                updateIncome,
+                getIncomes,
+                incomes,
+                deleteIncome,
+                expenses,
+                totalIncome,
+                addExpense,
+                updateExpense,
+                getExpenses,
+                deleteExpense,
+                totalExpenses,
+                totalBalance,
+                transactionHistory,
+                error,
+                setError,
+                user,
+                isAuthenticated,
+                login,
+                register,
+                logout,
+                categories,
+                addCategory,
+                getCategories,
+                updateCategory,
+                deleteCategory,
+                active,
+                setActive,
+            }}
+        >
             {children}
         </GlobalContext.Provider>
-    )
-}
+    );
+};
 
-export const useGlobalContext = () =>{
-    return useContext(GlobalContext)
-}
+export const useGlobalContext = () => {
+    return useContext(GlobalContext);
+};
