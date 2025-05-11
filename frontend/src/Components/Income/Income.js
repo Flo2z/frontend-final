@@ -131,14 +131,19 @@ function Income() {
 }
 
 const IncomeStyled = styled.div`
+  h1, h5 {
+  color:rgb(34, 34, 96);
+  }
   display: flex;
   overflow: auto;
   .total-income {
+    color: rgb(34, 34, 96);
+    background: rgba(255, 255, 255, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     border: 2px solid #ffffff;
-    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
     padding: 1rem;
     margin: 1rem 0;
@@ -162,7 +167,7 @@ const IncomeStyled = styled.div`
     padding: 1rem;
     border: 2px solid #ffffff;
     border-radius: 15px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.8);
     box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
     .category-header {
       margin-bottom: 1rem;
@@ -170,7 +175,7 @@ const IncomeStyled = styled.div`
       padding-bottom: 0.5rem;
       h3 {
         font-size: 1.5rem;
-        color: #ffffff;
+        color: rgb(34, 34, 96);
       }
       p {
         font-size: 1rem;

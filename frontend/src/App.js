@@ -27,17 +27,11 @@ function App() {
 
 const AppStyled = styled.div`
     height: 100vh;
-    background: radial-gradient(
-            circle at -8.9% 51.2%,
-            rgb(248, 246, 242) 0%,
-            rgb(110, 186, 161) 15.9%,
-            rgb(168, 170, 168) 15.9%,
-            rgb(152, 203, 237) 24.4%,
-            rgb(7, 146, 237) 24.5%,
-            rgb(117, 194, 243) 66%
-    );
+    background linear-gradient(to right bottom, rgb(230, 230, 250), rgb(240, 240, 240));
     position: relative;
 
+
+    
     main {
         flex: 1;
         border: 3px solid #ffffff;

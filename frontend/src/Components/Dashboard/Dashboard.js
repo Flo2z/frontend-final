@@ -202,6 +202,10 @@ function Dashboard() {
 }
 
 const DashboardStyled = styled.div`
+  .history-item{
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.3);
+  }
+
   .dashboard-grid {
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -215,15 +219,15 @@ const DashboardStyled = styled.div`
   }
   .right-section {
     .history-con {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.8);
       border: 2px solid #ffffff;
       border-radius: 15px;
       padding: 1rem;
-      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
       max-height: 100vh;
       overflow-y: auto;
       h2 {
-        color: #ffffff;
+        color:rgb(34, 34, 96);
         margin-bottom: 1rem;
       }
     }
@@ -235,7 +239,7 @@ const DashboardStyled = styled.div`
       gap: 1rem;
       margin-bottom: 1rem;
       h2 {
-        color: #ffffff;
+        color: rgb(34, 34, 96);
       }
       .add-btn {
         background: var(--color-accent);
@@ -261,17 +265,18 @@ const DashboardStyled = styled.div`
       gap: 1.5rem;
     }
     .category-item {
-      background: rgba(255, 255, 255, 0.1);
+      margin-bottom:1.3rem;
+      background: rgba(255, 255, 255, 0.8);
       border: 2px solid #ffffff;
       border-radius: 15px;
       padding: 1rem;
-      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
       h3 {
         font-size: 1.3rem;
-        color: #ffffff;
+        color: rgb(34, 34, 96);
         margin-bottom: 0.5rem;
         text-align: center;
       }
@@ -290,7 +295,7 @@ const DashboardStyled = styled.div`
   }
   .stats-all-time {
     h2 {
-      color: #ffffff;
+      color: rgb(34, 34, 96);
       margin-bottom: 1rem;
     }
     .stats-con {
@@ -304,19 +309,20 @@ const DashboardStyled = styled.div`
       .income,
       .expense,
       .balance {
+        background: rgba(255, 255, 255, 0.8);
         border: 2px solid #ffffff;
-        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
         border-radius: 20px;
         padding: 1rem;
         h3 {
-          color: #ffffff;
+          color: rgb(34, 34, 96);
           font-size: 1.2rem;
           margin-bottom: 0.5rem;
         }
         p {
           font-size: 1.8rem;
           font-weight: 700;
-          color: #ffffff;
+          color: rgb(34, 34, 96);
         }
       }
       .balance {
@@ -326,8 +332,7 @@ const DashboardStyled = styled.div`
         justify-content: center;
         align-items: center;
         p {
-          color: #ffffff;
-          opacity: 0.6;
+          color: rgb(34, 34, 96);
           font-size: 1.8rem;
         }
       }
