@@ -73,28 +73,27 @@ const NavStyled = styled.nav`
         display: flex;
         align-items: center;
         gap: 2rem;
-        list-style: none;
         margin: 0;
         padding: 0;
 
-        li {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background 0.2s;
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.3);
-            }
-
-            i, span {
-                color: rgba(34, 34, 96, 0.6);
-                font-weight: 500;
-            }
-        }
+        //li {
+        //    display: flex;
+        //    align-items: center;
+        //    gap: 0.5rem;
+        //    cursor: pointer;
+        //    padding: 0.5rem 1rem;
+        //    border-radius: 8px;
+        //    transition: background 0.2s;
+        //
+        //    &:hover {
+        //        background: rgba(255, 255, 255, 0.3);
+        //    }
+        //
+        //    i, span {
+        //        color: rgba(34, 34, 96, 0.6);
+        //        font-weight: 500;
+        //    }
+        //}
     }
 
     .active {
