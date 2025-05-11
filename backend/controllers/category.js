@@ -54,9 +54,30 @@ exports.updateCategory = asyncHandler(async (req, res) => {
         throw new Error("Monthly budget must be a non-negative number");
     }
 
-    // Find and update category
-    const category = await CategorySchema.findOneAndUpdate(
-        { _id: id, user: req.user._id },
+    // Find the existing category
+    const category = await CategorySchema.findById(id);
+    if (!category || category.user.toString() !== req.user._id.toString()) {
+        res.status(404);
+        throw new Error("Category not found or not authorized");
+    }
+
+    // Check if the new name is unique (excluding the current category)
+    const existingCategory = await CategorySchema.findOne({
+        name,
+        user: req.user._id,
+        _id: { $ne: id },
+    });
+    if (existingCategory) {
+        res.status(400);
+        throw new Error("Category name already exists");
+    }
+
+    // Store the old category name
+    const oldName = category.name;
+
+    // Update category
+    const updatedCategory = await CategorySchema.findByIdAndUpdate(
+        id,
         {
             name,
             type,
@@ -65,16 +86,23 @@ exports.updateCategory = asyncHandler(async (req, res) => {
         { new: true }
     );
 
-    if (!category) {
-        res.status(404);
-        throw new Error("Category not found or not authorized");
-    }
+    // Update category name in incomes
+    await IncomeSchema.updateMany(
+        { category: oldName, user: req.user._id },
+        { $set: { category: name } }
+    );
+
+    // Update category name in expenses
+    await ExpenseSchema.updateMany(
+        { category: oldName, user: req.user._id },
+        { $set: { category: name } }
+    );
 
     res.status(200).json({
-        _id: category._id,
-        name: category.name,
-        type: category.type,
-        monthlyBudget: category.monthlyBudget,
+        _id: updatedCategory._id,
+        name: updatedCategory.name,
+        type: updatedCategory.type,
+        monthlyBudget: updatedCategory.monthlyBudget,
     });
 });
 
