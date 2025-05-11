@@ -46,7 +46,7 @@ export const GlobalProvider = ({ children }) => {
             setIsAuthenticated(true);
             getCategories();
         } catch (err) {
-            setError(err.response?.data?.message || "Login failed");
+            setError(err.response?.data?.message || "Ошибка входа");
         }
     };
 
@@ -61,7 +61,7 @@ export const GlobalProvider = ({ children }) => {
             setIsAuthenticated(true);
             getCategories();
         } catch (err) {
-            setError(err.response?.data?.message || "Registration failed");
+            setError(err.response?.data?.message || "Ошибка регистрации");
         }
     };
 
@@ -83,7 +83,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.post(`${BASE_URL}add-income`, income);
             getIncomes();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to add income");
+            setError(err.response?.data?.message || "Не удалось добавить доход");
         }
     };
 
@@ -92,7 +92,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.put(`${BASE_URL}update-income/${id}`, income);
             getIncomes();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to update income");
+            setError(err.response?.data?.message || "Не удалось обновить доход");
         }
     };
 
@@ -101,7 +101,7 @@ export const GlobalProvider = ({ children }) => {
             const response = await axios.get(`${BASE_URL}get-incomes`);
             setIncomes(response.data);
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to fetch incomes");
+            setError(err.response?.data?.message || "Не удалось загрузить доходы");
         }
     };
 
@@ -110,7 +110,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.delete(`${BASE_URL}delete-income/${id}`);
             getIncomes();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to delete income");
+            setError(err.response?.data?.message || "Не удалось удалить доход");
         }
     };
 
@@ -123,7 +123,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.post(`${BASE_URL}add-expense`, expense);
             getExpenses();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to add expense");
+            setError(err.response?.data?.message || "Не удалось добавить расход");
         }
     };
 
@@ -132,7 +132,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.put(`${BASE_URL}update-expense/${id}`, expense);
             getExpenses();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to update expense");
+            setError(err.response?.data?.message || "Не удалось обновить расход");
         }
     };
 
@@ -141,7 +141,7 @@ export const GlobalProvider = ({ children }) => {
             const response = await axios.get(`${BASE_URL}get-expenses`);
             setExpenses(response.data);
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to fetch expenses");
+            setError(err.response?.data?.message || "Не удалось загрузить расходы");
         }
     };
 
@@ -150,7 +150,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.delete(`${BASE_URL}delete-expense/${id}`);
             getExpenses();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to delete expense");
+            setError(err.response?.data?.message || "Не удалось удалить расход");
         }
     };
 
@@ -173,7 +173,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.post(`${BASE_URL}add-category`, category);
             getCategories();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to add category");
+            setError(err.response?.data?.message || "Не удалось добавить категорию");
         }
     };
 
@@ -182,21 +182,18 @@ export const GlobalProvider = ({ children }) => {
             const response = await axios.get(`${BASE_URL}get-categories`);
             setCategories(response.data);
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to fetch categories");
+            setError(err.response?.data?.message || "Не удалось загрузить категории");
         }
     };
 
     const updateCategory = async (id, updatedCategory) => {
         try {
-            const response = await axios.put(`${BASE_URL}/update-category/${id}`, updatedCategory);
-            setCategories(
-                categories.map((category) =>
-                    category._id === id ? response.data : category
-                )
-            );
+            await axios.put(`${BASE_URL}update-category/${id}`, updatedCategory);
+            // Обновляем категории, доходы и расходы
+            await Promise.all([getCategories(), getIncomes(), getExpenses()]);
             setError(null);
-        } catch (error) {
-            setError(error.response?.data?.message || "Failed to update category");
+        } catch (err) {
+            setError(err.response?.data?.message || "Не удалось обновить категорию");
         }
     };
 
@@ -205,7 +202,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.delete(`${BASE_URL}delete-category/${id}`);
             getCategories();
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to delete category");
+            setError(err.response?.data?.message || "Не удалось удалить категорию");
         }
     };
 

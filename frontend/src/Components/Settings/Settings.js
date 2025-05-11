@@ -87,6 +87,7 @@ function Settings() {
                                 value={formState.type}
                                 name="type"
                                 onChange={handleInput("type")}
+                                disabled={!!editingCategory} // Disable during editing
                             >
                                 <option value="expense">Expense</option>
                                 <option value="income">Income</option>
@@ -204,6 +205,11 @@ const SettingsStyled = styled.div`
             color: rgba(34, 34, 96, 0.4);
             &:focus, &:active {
                 color: #222260;
+            }
+            &:disabled {
+                background: rgba(200, 200, 200, 0.3);
+                cursor: not-allowed;
+                color: rgba(34, 34, 96, 0.6);
             }
         }
         .input-control {
