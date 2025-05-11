@@ -99,7 +99,7 @@ function Settings() {
                             <div className="category-details">
                                 <h4>{category.name}</h4>
                                 <p>Type: {category.type}</p>
-                                <p>Monthly Budget: Rs. {category.monthlyBudget.toFixed(2)}</p>
+                                <p>Monthly Budget: ₸. {category.monthlyBudget.toFixed(2)}</p>
                             </div>
                             <div className="category-actions">
                                 <Button

@@ -58,7 +58,7 @@ function Income() {
           label: (context) => {
             const label = context.label || "";
             const value = context.raw || 0;
-            return `${label}: Rs. ${value.toFixed(2)}`;
+            return `${label}: ₸. ${value.toFixed(2)}`;
           },
         },
       },
@@ -70,7 +70,7 @@ function Income() {
         <InnerLayout>
           <h1>Incomes</h1>
           <h2 className="total-income">
-            Total Income: <span>Rs. {totalIncome()}</span>
+            Total Income: <span>₸. {totalIncome()}</span>
           </h2>
           <div className="income-content">
             <div className="form-container">
@@ -97,8 +97,8 @@ function Income() {
                     <div key={category} className="category-group">
                       <div className="category-header">
                         <h3>{category}</h3>
-                        <p>Monthly Budget: Rs. {monthlyBudget.toFixed(2)}</p>
-                        <p>Total Earned: Rs. {totalAmount.toFixed(2)}</p>
+                        <p>Monthly Budget: ₸. {monthlyBudget.toFixed(2)}</p>
+                        <p>Total Earned: ₸. {totalAmount.toFixed(2)}</p>
                         <div className="pie-chart">
                           <Pie data={pieData} options={pieChartOptions} />
                         </div>

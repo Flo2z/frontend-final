@@ -54,7 +54,7 @@ function Expenses() {
           label: (context) => {
             const label = context.label || "";
             const value = context.raw || 0;
-            return `${label}: Rs. ${value.toFixed(2)}`;
+            return `${label}: ₸. ${value.toFixed(2)}`;
           },
         },
       },
@@ -74,7 +74,7 @@ function Expenses() {
         <InnerLayout>
           <h1>Expenses</h1>
           <h2 className="total-expense">
-            Total Expense: <span>Rs. {totalExpenses()}</span>
+            Total Expense: <span>₸. {totalExpenses()}</span>
           </h2>
           <div className="expense-content">
             <div className="form-container">
@@ -101,8 +101,8 @@ function Expenses() {
                     <div key={category} className="category-group">
                       <div className="category-header">
                         <h3>{category}</h3>
-                        <p>Monthly Budget: Rs. {monthlyBudget.toFixed(2)}</p>
-                        <p>Total Spent: Rs. {totalAmount.toFixed(2)}</p>
+                        <p>Monthly Budget: ₸. {monthlyBudget.toFixed(2)}</p>
+                        <p>Total Spent: ₸. {totalAmount.toFixed(2)}</p>
                         <div className="pie-chart">
                           <Pie data={pieData} options={pieChartOptions} />
                         </div>

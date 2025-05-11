@@ -80,7 +80,7 @@ function Dashboard() {
           label: (context) => {
             const label = context.label || "";
             const value = context.raw || 0;
-            return `${label}: Rs. ${value.toFixed(2)}`;
+            return `${label}: ₸. ${value.toFixed(2)}`;
           },
         },
       },
@@ -122,8 +122,8 @@ function Dashboard() {
                     return (
                         <div key={cat._id} className="category-item">
                           <h3>{cat.name}</h3>
-                          <p>Total Earned: Rs. {cat.totalAmount.toFixed(2)}</p>
-                          <p>Monthly Budget: Rs. {cat.monthlyBudget.toFixed(2)}</p>
+                          <p>Total Earned: ₸. {cat.totalAmount.toFixed(2)}</p>
+                          <p>Monthly Budget: ₸. {cat.monthlyBudget.toFixed(2)}</p>
                           <p>Transactions: {cat.transactionCount}</p>
                           <div className="pie-chart">
                             <Pie data={pieData} options={pieChartOptions} />
@@ -161,8 +161,8 @@ function Dashboard() {
                     return (
                         <div key={cat._id} className="category-item">
                           <h3>{cat.name}</h3>
-                          <p>Total Spent: Rs. {cat.totalAmount.toFixed(2)}</p>
-                          <p>Monthly Budget: Rs. {cat.monthlyBudget.toFixed(2)}</p>
+                          <p>Total Spent: ₸. {cat.totalAmount.toFixed(2)}</p>
+                          <p>Monthly Budget: ₸. {cat.monthlyBudget.toFixed(2)}</p>
                           <p>Transactions: {cat.transactionCount}</p>
                           <div className="pie-chart">
                             <Pie data={pieData} options={pieChartOptions} />
@@ -177,15 +177,15 @@ function Dashboard() {
                 <div className="stats-con">
                   <div className="income">
                     <h3>All-Time Income</h3>
-                    <p>Rs. {totalIncome()}</p>
+                    <p>₸. {totalIncome()}</p>
                   </div>
                   <div className="expense">
                     <h3>All-Time Expense</h3>
-                    <p>Rs. {totalExpenses()}</p>
+                    <p>₸. {totalExpenses()}</p>
                   </div>
                   <div className="balance">
                     <h3>All-Time Balance</h3>
-                    <p>Rs. {totalBalance()}</p>
+                    <p>₸. {totalBalance()}</p>
                   </div>
                 </div>
               </div>
