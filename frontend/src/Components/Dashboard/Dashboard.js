@@ -121,10 +121,8 @@ function Dashboard() {
   return (
     <DashboardStyled>
       <InnerLayout>
-        <div className="dashboard-grid">
-          <div className="left-section">
-            <div className="date-filter">
-              <h2>Filter</h2>
+        <div className="date-filter">
+              <h2>Filter by Date</h2>
               <label>
                 From:
                 <input
@@ -142,6 +140,27 @@ function Dashboard() {
                 />
               </label>
             </div>
+            <div className="stats-all-time">
+              <h2>Statistics</h2>
+              <div className="stats-con">
+                <div className="income">
+                  <h3>Income</h3>
+                  <p>{totalFilteredIncome().toFixed(2)}₸</p>
+                </div>
+                <div className="balance">
+                  <h3>Balance</h3>
+                  <p>{totalFilteredBalance().toFixed(2)}₸</p>
+                </div>
+                <div className="expense">
+                  <h3>Expense</h3>
+                  <p>{totalFilteredExpenses().toFixed(2)}₸</p>
+                </div>
+                
+              </div>
+            </div>
+        <div className="dashboard-grid">
+          <div className="left-section">
+            
             <div className="category-summary">
               <div className="category-header">
                 <h2>Income Categories</h2>
@@ -182,7 +201,13 @@ function Dashboard() {
                   );
                 })}
               </div>
+            </div>
 
+            
+          </div>
+
+          <div className="right-section">
+            <div className="category-summary">
               <div className="category-header">
                 <h2>Expense Categories</h2>
                 <button
@@ -223,60 +248,75 @@ function Dashboard() {
                 })}
               </div>
             </div>
-
-            <div className="stats-all-time">
-              <h2>Statistics</h2>
-              <div className="stats-con">
-                <div className="income">
-                  <h3>Income</h3>
-                  <p>{totalFilteredIncome().toFixed(2)}₸</p>
-                </div>
-                <div className="expense">
-                  <h3>Expense</h3>
-                  <p>{totalFilteredExpenses().toFixed(2)}₸</p>
-                </div>
-                <div className="balance">
-                  <h3>Balance</h3>
-                  <p>{totalFilteredBalance().toFixed(2)}₸</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="right-section">
             
-            <div className="history-con">
-              <History />
-            </div>
           </div>
+          
         </div>
+        <div className="history-div">
+        <div className="history-con">
+              <History />
+          </div>
+          </div>
       </InnerLayout>
     </DashboardStyled>
   );
 }
 
 const DashboardStyled = styled.div`
+  h2{
+     color: #222260;
+    }
+  .history-div{
+  justify-content: center;
+  display:flex;
+  }
+  .history-con {
+    width:50%;
+    
+  }
   .history-item {
     box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.3);
+    
   }
-
   .dashboard-grid {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 2rem;
-    min-height: 100%;
-  }
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  gap: 2rem;
+  min-height: 100%;
+}
 
-  .left-section {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    .date-filter{
+.left-section {
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  h2 {
+    color: #222260;
+  }
+}
+.right-section {
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  h2 {
+    color: #222260;
+  }
+}
+
+  .date-filter{
       background: rgba(255, 255, 255, 0.8);
       border: 2px solid #ffffff;
       border-radius: 15px;
       padding: 1rem;
       box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
+      margin-bottom:1.2rem;
+      h2{
+        color:#222260;
+        
+      }
       
       input{
         font-family: inherit;
@@ -294,30 +334,18 @@ const DashboardStyled = styled.div`
             color: rgba(34, 34, 96, 0.4);
         }
       }
-
-      h2{
-        color:#222260;
-        margin-bottom: 1.2rem;
-      }
-
-    }
+  .dashboard-grid {
+    
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem;
+    min-height: 100%;
   }
 
-  .right-section {
-    .history-con {
-      background: rgba(255, 255, 255, 0.8);
-      border: 2px solid #ffffff;
-      border-radius: 15px;
-      padding: 1rem;
-      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
-      max-height: 100vh;
-      overflow-y: auto;
-      
-      h2 {
-        color: rgb(34, 34, 96);
-        margin-bottom: 1rem;
-      }
-    }
+  
+
+  }
+  
   }
 
   .category-summary {
@@ -401,10 +429,7 @@ const DashboardStyled = styled.div`
       grid-template-columns: repeat(4, 1fr);
       gap: 2rem;
 
-      .income,
-      .expense {
-        grid-column: span 2;
-      }
+      margin-bottom:1.2rem;
 
       .income,
       .expense,
