@@ -106,7 +106,7 @@ function Expenses() {
                       data: [totalAmount, remaining],
                       backgroundColor: ["#FF0000", "#42AD00"],
                       borderColor: "#ffffff",
-                      borderWidth: 2,
+                      borderWidth: 1,
                     },
                   ],
                 };

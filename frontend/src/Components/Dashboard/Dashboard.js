@@ -165,7 +165,7 @@ function Dashboard() {
                         data: [earned, remaining],
                         backgroundColor: ["#42AD00", "#FFA500"],
                         borderColor: "#ffffff",
-                        borderWidth: 2,
+                        borderWidth: 1,
                       },
                     ],
                   };
@@ -205,7 +205,7 @@ function Dashboard() {
                         data: [spent, remaining],
                         backgroundColor: ["#FF0000", "#42AD00"],
                         borderColor: "#ffffff",
-                        borderWidth: 2,
+                        borderWidth: 1,
                       },
                     ],
                   };

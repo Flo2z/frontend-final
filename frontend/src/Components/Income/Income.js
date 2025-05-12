@@ -103,7 +103,7 @@ function Income() {
                       data: [totalAmount, remaining],
                       backgroundColor: ["#42AD00", "#FFA500"],
                       borderColor: "#ffffff",
-                      borderWidth: 2,
+                      borderWidth: 1,
                     },
                   ],
                 };
