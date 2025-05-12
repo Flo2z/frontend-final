@@ -467,8 +467,16 @@ const DashboardStyled = styled.div`
       }
     }
   }
-
+  @media (max-width: 320px) {
+    div{
+    padding:1px}
+  }
   @media (max-width: 768px) {
+
+    .date-filter{
+      display:flex;
+      flex-direction:column;
+      }
     .dashboard-grid {
       grid-template-columns: 1fr;
 
@@ -476,6 +484,60 @@ const DashboardStyled = styled.div`
         grid-row: 2;
       }
     }
+      .stats-all-time {
+    h2 {
+      color: rgb(34, 34, 96);
+      margin-bottom: 1rem;
+    }
+
+    .stats-con {
+      display: flex;
+      flex-direction:column;
+      gap: 2rem;
+
+      margin-bottom:1.2rem;
+      
+      .income,
+      .expense,
+      .balance {
+        background: rgba(255, 255, 255, 0.8);
+        border: 2px solid #ffffff;
+        box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        h3 {
+          color: rgb(34, 34, 96);
+          font-size: 1.2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: rgb(34, 34, 96);
+        }
+      }
+
+      .balance {
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        p {
+          color: rgb(34, 34, 96);
+          font-size: 1.8rem;
+        }
+      }
+    }
+  }
+
   }
 `;
 
