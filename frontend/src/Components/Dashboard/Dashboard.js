@@ -87,7 +87,7 @@ function Dashboard() {
       legend: {
         position: "bottom",
         labels: {
-          color: "#ffffff",
+          color: "#222260",
           font: {
             size: 12,
           },
@@ -102,6 +102,19 @@ function Dashboard() {
           },
         },
       },
+      datalabels: {
+      color: '#222260',
+      font: {
+        weight: 'bold',
+      },
+      formatter: (value, context) => {
+        const data = context.chart.data.datasets[0].data;
+        const total = data.reduce((acc, val) => acc + val, 0);
+        const percent = ((value / total) * 100).toFixed(1);
+        return `${percent}%`;
+      },
+      
+    },
     },
   };
 

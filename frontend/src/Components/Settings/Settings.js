@@ -147,7 +147,10 @@ function Settings() {
                                     bg={"var(--color-accent)"}
                                     color={"#fff"}
                                     iColor={"#fff"}
-                                    onClick={() => setEditingCategory(category)}
+                                    onClick={() => {
+                                        setEditingCategory(category);
+                                        window.scrollTo({top: 0, behavior:'smooth'});
+                                    } }
                                 />
                                 <Button
                                     icon={trash}

@@ -5,6 +5,7 @@ import { InnerLayout } from "../../styles/Layouts";
 import IncomeForm from "./IncomeForm";
 import IncomeItem from "../IncomeItem/IncomeItem";
 import { Pie } from "react-chartjs-2";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -13,7 +14,7 @@ import {
 } from "chart.js";
 
 // Register Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 function Income() {
   const { incomes, getIncomes, deleteIncome, totalIncome, categories } = useGlobalContext();
@@ -43,27 +44,40 @@ function Income() {
 
   // Pie chart options
   const pieChartOptions = {
-    plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          color: "#ffffff",
-          font: {
-            size: 12,
-          },
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            const label = context.label || "";
-            const value = context.raw || 0;
-            return `${label}: ${value.toFixed(2)}₸`;
-          },
+  plugins: {
+    legend: {
+      position: "bottom",
+      labels: {
+        color: "#222260",
+        font: {
+          size: 12,
         },
       },
     },
-  };
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          const label = context.label || "";
+          const value = context.raw || 0;
+          return `${label}: ${value.toFixed(2)}₸`;
+        },
+      },
+    },
+    datalabels: {
+      color: '#222260',
+      font: {
+        weight: 'bold',
+      },
+      formatter: (value, context) => {
+        const data = context.chart.data.datasets[0].data;
+        const total = data.reduce((acc, val) => acc + val, 0);
+        const percent = ((value / total) * 100).toFixed(1);
+        return `${percent}%`;
+      },
+      
+    },
+  },
+};
 
   return (
       <IncomeStyled>
@@ -100,7 +114,7 @@ function Income() {
                         <p>Monthly Budget: {monthlyBudget.toFixed(2)}₸</p>
                         <p>Total Earned: {totalAmount.toFixed(2)}₸</p>
                         <div className="pie-chart">
-                          <Pie data={pieData} options={pieChartOptions} />
+                          <Pie data={pieData} options={pieChartOptions} plugins={[ChartDataLabels]} />
                         </div>
                       </div>
                       {groupedIncomes[category].map((income) => {

@@ -29,8 +29,9 @@ const AppStyled = styled.div`
     height: 100vh;
     background linear-gradient(to right bottom, rgb(230, 230, 250), rgb(240, 240, 240));
     position: relative;
-
-
+    
+    overflow: auto;
+   
     
     main {
         flex: 1;
@@ -38,6 +39,7 @@ const AppStyled = styled.div`
         backdrop-filter: blur(4.5px);
         border-radius: 32px;
         overflow-x: hidden;
+        overflow-y: auto;
 
         &::-webkit-scrollbar {
             width: 0;
