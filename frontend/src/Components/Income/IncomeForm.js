@@ -135,6 +135,7 @@ function IncomeForm({ editingIncome, clearEdit }) {
             id="description"
             cols="30"
             rows="4"
+            maxLength="20"
             onChange={handleInput("description")}
         ></textarea>
             </div>
